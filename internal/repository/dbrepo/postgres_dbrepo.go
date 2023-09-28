@@ -80,6 +80,7 @@ func (m *PostgresDBRepo) OneMovie (id int) (*models.Movie, error) {
 		&movie.RunTime,
 		&movie.MPAARating,
 		&movie.Description,
+		&movie.Image,
 		&movie.CreatedAt,
 		&movie.UpdatedAt,
 	)
@@ -89,7 +90,7 @@ func (m *PostgresDBRepo) OneMovie (id int) (*models.Movie, error) {
 	}
 
 	// get genres, if any
-	query = `select g.id, g.genre from movies_genres mg left join genres g on (mg.genre_id = g.id) where mg.movie_id $1 order by g.genre`
+	query = `select g.id, g.genre from movies_genres mg left join genres g on (mg.genre_id = g.id) where mg.movie_id = $1 order by g.genre`
 
 	rows, err := m.DB.QueryContext(ctx, query, id)
 	if err != nil && err != sql.ErrNoRows {
@@ -133,6 +134,7 @@ func (m *PostgresDBRepo) OneMovieForEdit (id int) (*models.Movie, []*models.Genr
 		&movie.RunTime,
 		&movie.MPAARating,
 		&movie.Description,
+		&movie.Image,
 		&movie.CreatedAt,
 		&movie.UpdatedAt,
 	)
@@ -142,7 +144,7 @@ func (m *PostgresDBRepo) OneMovieForEdit (id int) (*models.Movie, []*models.Genr
 	}
 
 	// get genres, if any
-	query = `select g.id, g.genre from movies_genres mg left join genres g on (mg.genre_id = g.id) where mg.movie_id $1 order by g.genre`
+	query = `select g.id, g.genre from movies_genres mg left join genres g on (mg.genre_id = g.id) where mg.movie_id = $1 order by g.genre`
 
 	rows, err := m.DB.QueryContext(ctx, query, id)
 	if err != nil && err != sql.ErrNoRows {
